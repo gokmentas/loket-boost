@@ -13,6 +13,17 @@ public class Movement : MonoBehaviour
 {
     // The InputAction object that will be used to detect thrusting
     [SerializeField] InputAction thrust;
+    // The strength of the thrust
+    [SerializeField] float thrustStrength = 1000f;
+    // Store the Rigidbody component of the player object
+    Rigidbody rb;
+
+    // Start is called before the first frame update
+    private void Start()
+    {
+        // Get the Rigidbody component of the player object
+        rb = GetComponent<Rigidbody>();
+    }
 
     // onenable is called when the script is enabled
     private void OnEnable()
@@ -21,14 +32,14 @@ public class Movement : MonoBehaviour
         thrust.Enable();
     }
 
-    // update is called once per frame
-    private void Update()
+    // fixedupdate is different from update as it is called at a fixed interval
+    private void FixedUpdate()
     {
         // Check if the thrust action is pressed
         if (thrust.IsPressed())
         {
-            // Log a message to the console
-            Debug.Log("Thrusting");
+            // Apply a force to the player object in the up direction
+            rb.AddRelativeForce(thrustStrength * Time.fixedDeltaTime * Vector3.up);
         }
     }
 }
