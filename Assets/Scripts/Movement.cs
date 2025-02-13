@@ -77,7 +77,11 @@ public class Movement : MonoBehaviour
     // ApplyRotation is a method that rotates the player object
     private void ApplyRotation(float rotationThisFrame)
     {
+        // Freeze the rotation of the player object because we are manually rotating it
+        rb.freezeRotation = true;
         // Rotate the player object
         transform.Rotate(rotationThisFrame * Time.fixedDeltaTime * Vector3.forward);
+        // Unfreeze the rotation of the player object because we are done rotating it
+        rb.freezeRotation = false;
     }
 }
