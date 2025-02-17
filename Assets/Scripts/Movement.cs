@@ -19,14 +19,16 @@ public class Movement : MonoBehaviour
     [SerializeField] float thrustStrength = 1000f;
     [SerializeField] float rotationStrength = 100f;
 
-    // Store the Rigidbody component of the player object
+    // Store the Rigidbody and Audio Source components of the player object
     Rigidbody rb;
+    AudioSource audioSource;
 
     // Doing this on start because we need to get the Rigidbody component
     private void Start()
     {
-        // Get the Rigidbody component of the player object
+        // Get the Rigidbody and Audio Source components of the player object
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Doing this on enable imstead of start because we need to enable the actions
@@ -40,6 +42,7 @@ public class Movement : MonoBehaviour
     // Calling movement methods in FixedUpdate instead of Update because we are using physics
     private void FixedUpdate()
     {
+        // Calling the movement methods
         ProcessThrust();
         ProcessRotation();
     }
@@ -52,6 +55,16 @@ public class Movement : MonoBehaviour
         {
             // Apply a force to the player object in the up direction
             rb.AddRelativeForce(thrustStrength * Time.fixedDeltaTime * Vector3.up);
+            // play the audio if it is not playing
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+        }
+        // If the thrust action is not pressed, stop the audio
+        else
+        {
+            audioSource.Stop();
         }
     }
 
