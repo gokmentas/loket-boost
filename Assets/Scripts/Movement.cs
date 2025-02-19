@@ -55,6 +55,7 @@ public class Movement : MonoBehaviour
         {
             // Apply a force to the player object in the up direction
             rb.AddRelativeForce(thrustStrength * Time.fixedDeltaTime * Vector3.up);
+            
             // play the audio if it is not playing
             if (!audioSource.isPlaying)
             {
@@ -92,8 +93,10 @@ public class Movement : MonoBehaviour
     {
         // Freeze the rotation of the player object because we are manually rotating it
         rb.freezeRotation = true;
+        
         // Rotate the player object
         transform.Rotate(rotationThisFrame * Time.fixedDeltaTime * Vector3.forward);
+        
         // Unfreeze the rotation of the player object because we are done rotating it
         rb.freezeRotation = false;
     }

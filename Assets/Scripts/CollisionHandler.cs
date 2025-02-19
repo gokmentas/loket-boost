@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour
 {
+    [SerializeField] float levelLoadDelay = 2f;
+
     // OnCollisionEnter is called when this collider/rigidbody has begun touching another rigidbody/collider
     private void OnCollisionEnter(Collision collision)
     {
@@ -13,22 +16,39 @@ public class CollisionHandler : MonoBehaviour
                 Debug.Log("This thing is friendly");
                 break;
             case "Finish":
-                Debug.Log("You finished the level");
-                LoadNextLevel();
+                // If the player collided with the finish line, start the finish sequence
+                StartFiinishSequence();
                 break;
             default:
-                Debug.Log("You hit something");
-                ReloadLevel();
+                // If the player collided with an object that is not friendly or the finish line, start the crash sequence
+                StartCrashSequence();
                 break;
         }
     }
 
+    // StartFiinishSequence is a method that starts the finish sequence
+    void StartFiinishSequence()
+    {
+        // todo: Add sfx and particles
+
+        // Disable the player's movement script
+        GetComponent<Movement>().enabled = false;
+        Invoke("LoadNextLevel", levelLoadDelay);
+    }
+
+    // StartCrashSequence is a method that starts the crash sequence
+    void StartCrashSequence()
+    {
+        // todo: Add sfx and particles
+        GetComponent<Movement>().enabled = false;
+        Invoke("ReloadLevel", levelLoadDelay);
+    }
+
     // LoadNextLevel is a method that loads the next scene
-    private static void LoadNextLevel()
+    void LoadNextLevel()
     {
         // Get the current scene index
         int currentScene = SceneManager.GetActiveScene().buildIndex;
-
         // Load the next scene if the current scene is less than 2 because we have 3 scenes
         if (currentScene < SceneManager.sceneCountInBuildSettings - 1)
         {
@@ -43,11 +63,9 @@ public class CollisionHandler : MonoBehaviour
     }
 
     // ReloadLevel is a method that reloads the current scene
-    private static void ReloadLevel()
+    void ReloadLevel()
     {
-        // Get the current scene index
         int currentScene = SceneManager.GetActiveScene().buildIndex;
-        // Reload the current scene
         SceneManager.LoadScene(currentScene);
     }
 }
