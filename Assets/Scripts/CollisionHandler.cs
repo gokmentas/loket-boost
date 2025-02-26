@@ -5,6 +5,18 @@ using UnityEngine.SceneManagement;
 public class CollisionHandler : MonoBehaviour
 {
     [SerializeField] float levelLoadDelay = 2f;
+    // the audio clip for the death explosion and finish sound
+    [SerializeField] AudioClip deathExplosion;
+    [SerializeField] AudioClip finishSound;
+
+    // Store the Audio Source component of the player object
+    AudioSource audioSource;
+
+    private void Start()
+    {
+        // Get the Audio Source component of the player object
+        audioSource = GetComponent<AudioSource>();
+    }
 
     // OnCollisionEnter is called when this collider/rigidbody has begun touching another rigidbody/collider
     private void OnCollisionEnter(Collision collision)
@@ -32,6 +44,7 @@ public class CollisionHandler : MonoBehaviour
         // todo: Add sfx and particles
 
         // Disable the player's movement script
+        audioSource.PlayOneShot(finishSound);
         GetComponent<Movement>().enabled = false;
         Invoke("LoadNextLevel", levelLoadDelay);
     }
@@ -40,6 +53,7 @@ public class CollisionHandler : MonoBehaviour
     void StartCrashSequence()
     {
         // todo: Add sfx and particles
+        audioSource.PlayOneShot(deathExplosion);
         GetComponent<Movement>().enabled = false;
         Invoke("ReloadLevel", levelLoadDelay);
     }

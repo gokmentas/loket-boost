@@ -18,6 +18,8 @@ public class Movement : MonoBehaviour
     // The strength of the thrust and rotation
     [SerializeField] float thrustStrength = 1000f;
     [SerializeField] float rotationStrength = 100f;
+    // The audio clip for the main engine sound
+    [SerializeField] AudioClip mainEngine;
 
     // Store the Rigidbody and Audio Source components of the player object
     Rigidbody rb;
@@ -59,7 +61,7 @@ public class Movement : MonoBehaviour
             // play the audio if it is not playing
             if (!audioSource.isPlaying)
             {
-                audioSource.Play();
+                audioSource.PlayOneShot(mainEngine);
             }
         }
         // If the thrust action is not pressed, stop the audio
